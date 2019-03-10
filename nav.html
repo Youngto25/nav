@@ -30,24 +30,26 @@
             }
             index = 0
             while(index < keys['length']){
-                div1 = document.createElement('div')
-                zhangsan.appendChild(div1)
+                div = document.createElement('div')
+                div.className='row'
+                zhangsan.appendChild(div)
                 index2 = 0
                 row =keys[index]
                 while(index2 < row['length']){
-                    z= document.createElement('kbd')
-                    z.textContent =row[index2]
-                    buttonx =document.createElement('button')
-                    buttonx.textContent ='edit'
-                    buttonx.id = row[index2]
-                    buttonx.onclick =function(wangwu){
+                    kbd= document.createElement('kbd')
+                    kbd.textContent =row[index2]
+                    kbd.className='A'
+                    button =document.createElement('button')
+                    button.textContent ='edit'
+                    button.id = row[index2]
+                    button.onclick =function(wangwu){
                         v=wangwu['target']['id']
                         x=prompt('给我一个网址')
                         hash[v] = x
                         localStorage.setItem('uuu',JSON.stringify(hash))
                     }
-                    z.appendChild(buttonx)
-                    div1.appendChild(z)
+                    kbd.appendChild(button)
+                    div.appendChild(kbd)
                     index2= index2+1
                 }
                 index= index +1
