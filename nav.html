@@ -11,56 +11,125 @@
         </main>
         <footer></footer>
         <script>
-            var keys={
-                '0': {0:'q',1:'w',2:'e',3:'r',4:'t',5:'y',6:'u',7:'i',8:'o',9:'p',length:10},
-                '1': {0:'a',1:'s',2:'d',3:'f',4:'g',5:'h',6:'j',7:'k',8:'l',length:9},
-                '2': {0:'z',1:'x',2:'c',3:'v',4:'b',5:'n',6:'m',length:7},
-                'length':3
+            //1.初始化数据
+            var hashA =init()
+            var keys = hashA['keys']
+            var hash = hashA['hashs']
+
+            //2.生成键盘
+            generateKeyboard(keys,hash)
+            
+            //3.监听用户
+            listenToUser(hash)
+
+
+
+            function getFromLocalStorage(name){
+                return JSON.parse(localStorage.getItem(name) || 'null')
             }
-            var hash ={
-                'q' :'qq.com',
-                'w' :'weibo.com',
-                'z' :'zhihu.com',
-                'm' :'www.mcdonalds.com.cn'
+            function tag(tagName,attributes){
+                var element = document.createElement(tagName)
+                for(var key in attributes){
+                    element[key] = attributes[key]
+                }
+                return element
             }
-            //取出LocalStorage中的uuu对应的hasn
-            var hashInLocalStorage = JSON.parse(localStorage.getItem('uuu') || 'null')
-            if(hashInLocalStorage){
-                hash=hashInLocalStorage
+
+            function createSpan(textContent){
+                var span= tag('span')
+                span.textContent =textContent
+                span.className= 'text'
+                return span//关键，否则Uncaught TypeError: Failed to execute 'appendChild' on 'Node': parameter 1 is not of type 'Node'.kbd.appendChild(span)报错
             }
-            index = 0
-            while(index < keys['length']){
-                div = document.createElement('div')
-                div.className='row'
-                zhangsan.appendChild(div)
-                index2 = 0
-                row =keys[index]
-                while(index2 < row['length']){
-                    kbd= document.createElement('kbd')
-                    kbd.textContent =row[index2]
-                    kbd.className='A'
-                    button =document.createElement('button')
+            function createButton(id){
+                var button =tag('button')
                     button.textContent ='edit'
-                    button.id = row[index2]
+                    button.id = id
                     button.onclick =function(wangwu){
-                        v=wangwu['target']['id']
-                        x=prompt('给我一个网址')
+                        var button2 =wangwu['target']
+                        var img2=button2.previousSibling
+                        var v=button2['id']
+                        var x=prompt('给我一个网址')
                         hash[v] = x
+                        img2.src='http://'+x+'/favicon.ico'
+                        img2.onerror=function(xxx){
+                            xxx.target.src='https://i.loli.net/2017/11/10/5a05afbc5e183.png'
+                    }
                         localStorage.setItem('uuu',JSON.stringify(hash))
                     }
+                    return button               
+            }
+            function createImg(domain){
+                var img =tag('img')
+                    if(domain){
+                        img.src='http://'+domain+'/favicon.ico'
+                    }else{
+                        img.src='https://i.loli.net/2017/11/10/5a05afbc5e183.png'
+                    }
+                    img.onerror=function(xxx){
+                        xxx.target.src='https://i.loli.net/2017/11/10/5a05afbc5e183.png'
+                    }
+                    return img
+            }
+
+            function init(){
+                var keys={
+                    '0': {0:'q',1:'w',2:'e',3:'r',4:'t',5:'y',6:'u',7:'i',8:'o',9:'p',length:10},
+                    '1': {0:'a',1:'s',2:'d',3:'f',4:'g',5:'h',6:'j',7:'k',8:'l',length:9},
+                    '2': {0:'z',1:'x',2:'c',3:'v',4:'b',5:'n',6:'m',length:7},
+                    'length':3
+                }
+                var hash ={
+                    'q' :'qq.com',
+                    't' :'ted.com',
+                    'y' :'youtube.com',
+                    'g' :'google.com',
+                    'w' :'weibo.com',
+                    'z' :'zhihu.com',
+                    'm' :'microsoft.com'
+                }
+            //取出LocalStorage中的uuu对应的hasn
+                var hashInLocalStorage = getFromLocalStorage('uuu')
+                    if(hashInLocalStorage){
+                    hash=hashInLocalStorage
+                    } 
+                return{
+                    'keys': keys,//注意这边不要少了,否则会报错Uncaught SyntaxError: Unexpected string，此处为hashA的两个并列的元素
+                    'hashs': hash
+                }
+            }
+            function generateKeyboard(keys,hash){
+                for(var index=0;index < keys['length'];index++){
+                var div = tag('div',{className: 'row'})
+                zhangsan.appendChild(div)
+
+                var row =keys[index]
+                for(var index2 = 0;index2 < row['length'];index2++){
+                    var span = createSpan(row[index2])
+
+                    var button =createButton(row[index2])
+
+                    var img =createImg(hash[row[index2]])
+
+                    var kbd= tag('kbd')
+                    kbd.className='A'
+                    kbd.appendChild(span)
+                    kbd.appendChild(img)
                     kbd.appendChild(button)
                     div.appendChild(kbd)
-                    index2= index2+1
                 }
-                index= index +1
             }
-            document.onkeypress =function(lisi){
+            }
+            function listenToUser(hash){
+                document.onkeypress =function(lisi){
                 //console.log('我发现你输入了一个键')
-                key=lisi['key']
-                website=hash[key]
+                var key=lisi['key']
+                var website=hash[key]
                 //location.href='http://'+website
                 window.open('http://'+website,'_blank')
+                }
             }
+
         </script>
     </body>
 </html>
