@@ -1,9 +1,9 @@
-## navigator
-### 描述
+# navigator
+## 描述
 一个集保存网址及搜索于一体的导航页。<br>
 技术栈:HTML5 ES6 Webpack scss
 
-### 效果
+## 效果
 ![效果图](https://github.com/Youngto25/nav-demo/blob/master/src/images/yilan.jpg)
 - 搜索框，输入需搜索的字符串，点击搜索按钮或者enter即可搜索（调用的是Bing的搜索接口）
 - 中间键盘，对应26个字母。每个字母代表一个网址。在搜索框未被focus的情况下按下相应字母即可跳转到相应网站
