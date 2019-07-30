@@ -1,7 +1,7 @@
 ## navigator
 ### 描述
-一个集保存网址及搜索于一体的导航页。
-技术栈:HTML5 ES6 Webpack
+一个集保存网址及搜索于一体的导航页。<br>
+技术栈:HTML5 ES6 Webpack scss
 
 ### 效果
 ![效果图](https://github.com/Youngto25/make-a-doraemon/raw/master/src/images/yilan.jpg)
