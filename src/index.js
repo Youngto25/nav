@@ -61,7 +61,7 @@ function getFromLocalStorage(name) {
 }
 
 function x(e) {
-    var key = e.key
+    var key = e.key.toLowerCase()
     var website = hash[key]
     window.open('http://' + website, '_blank')
 }
