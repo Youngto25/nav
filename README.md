@@ -10,46 +10,151 @@
 - 可自行编辑对应的网址。鼠标悬浮到按钮上会出现edit提醒，点击即可编辑。网址格式采用keyword.com，例如google.com
 
 ## 核心代码
-
-### 如何动态生成
-#### 声明code
+### 实现搜索
+#### 声明class Search
 ```
-let code = `哆啦A梦的样式`
-```
-#### 声明方法writeCode
-利用setTimeout实现setInterval，通过按钮改变interval的值来改变innerHTML的加载速率。
-通过substring来逐步加载code。
-当结束按钮被点击时，wirte值被改变，跳出定时器，不再进行递归。
-```
-let interval = 5
-let write = true
-function writeCode(code){
-  let domCode = document.querySelector('#code')
-  let styleTag = document.querySelector('#styleTag')
-  let n = 0
-  setTimeout(function x(){
-    if(!write) return
-    n += 1
-    domCode.innerHTML = code.substring(0,n)
-    styleTag.innerHTML = code.substring(0,n)
-    domCode.scrollTop = domCode.scrollHeight
-    if(n>=code.length) return
-    setTimeout(x,interval)
-  },interval)
-}
-```
-
-### 移动端的适配方法
-当刚被加载时，调用change()函数，clientWidht大于等于800时，使用样式default，否则使用phone。
-监听window的resize事件，一旦被触发，则调用change()函数。
-```
-change()
-window.addEventListener('resize',change)
-function change(){
-  if(document.documentElement.clientWidth >= 800){
-    document.querySelector('link').href = './default.css'
-  }else{
-    document.querySelector('link').href = './phone.css'
+class Search{
+  constructor(el){
+    this.$el = el
+    this.$ = s=> this.$el.querySelector(s)
+    this.$$ = s=> this.$el.querySelectorAll(s)
+    this.$input = this.$('input')
+    this.$value = ''
+    this.getValue()
+    this.buttonClick()
+    this.listenEnter()
+  }
+  
+  getValue(){
+    this.$input.addEventListener('input',(e)=>{
+      this.$value = e.target.value
+    })
+  }
+  
+  search(){
+    window.open(`https://cn.bing.com/search?q=${this.$value}`)
   }
 }
+
+new Search('搜索框元素')
 ```
+- 监听input事件，得到输入的value值
+- 监听搜索按钮是否被点击(click)，一旦被点击调用search函数
+- 监听enter按键是否被点击(keyup,event.keyCode === 13)，一旦被点击调用search函数
+
+### 键盘的生成
+声明变量keys，此变量内容为26个英文字母
+```
+let keys = [
+    ['q', 'w','e','r','t','y', 'u','i','o','p'],
+    ['a','s','d','f','g','h','j','k','l'],
+    ['z','x','c','v','b','n','m']
+]
+```
+声明变量hash，此变量存放有字母对应的网址
+```
+let hash = {
+    'q': 'qq.com',
+    't': 'ted.com',
+    'y': 'youtube.com',
+    'g': 'google.com',
+    'w': 'weibo.com',
+    'z': 'zhihu.com',
+    'm': 'microsoft.com'
+}
+```
+声明class createKeyboard,将keys hash 及需要操作的元素传入的class中
+```
+class createKeyboard {
+  constructor(el, keys, hash) {
+    this.$el = el
+    this.$$ = s => this.$el.querySelectorAll(s)
+    this.$keys = keys
+    this.$hash = hash
+    this.createRow(this.$keys)
+  }
+  
+  createRow(keys){
+    this.$el.innerHTML = keys.map(key => 
+      `
+        <div class="row">
+          ${this.createKbd(key)}
+        </div>
+      `
+    ).join('')
+    this.createButton()
+  }
+
+  createKbd(key){
+    return key.map((button)=>
+    `
+      <kbd class="A">
+        <span class="text">${button}</span>
+        ${this.createImg(button)}
+        <button id="${button}" class="edit">edit</button>
+      </kbd>
+    `).join('')
+  }
+
+  createImg(button) {
+    let address = this.$hash[button]
+    if(!address){
+      return `
+        <img src="https://i.loli.net/2017/11/10/5a05afbc5e183.png"></img>
+      `
+    }else{
+      return `
+        <img src="http://${address}/favicon.ico"></img>
+      `
+    }
+  }
+  
+  createButton() {  //监听每个字母的button是否被点击，若被点击则弹出输入框，取得输入的数组存入hash内，并获得favicon
+    let edits = this.$$('.edit')
+    for(let i=0; i<edits.length; i++){
+      edits[i].addEventListener('click',(event)=>{
+        console.log(event)
+        let button2 = event.target
+        let img2 = button2.previousSibling
+        let v = button2.id
+        let x = prompt('给我一个网址')
+        this.$hash[v] = x
+        img2.src = 'http://' + x + '/favicon.ico'
+        img2.onerror = function (xxx) {
+          xxx.target.src = 'https://i.loli.net/2017/11/10/5a05afbc5e183.png'
+        }
+        localStorage.setItem('uuu', JSON.stringify(this.$hash))
+      })
+    }
+  }
+}
+
+new createKeyboard($('#zhangsan'),keys, hash)
+```
+
+### 监听document的keypress
+```
+document.addEventListener('keypress',x) 
+function x(e) {
+    var key = e.key.toLowerCase()
+    var website = hash[key]
+    window.open('http://' + website, '_blank')
+}
+```
+
+### 在搜索框的input事件及document的keypress事件之间切换
+```
+$('.search-wrapper input').addEventListener('focus',(e)=>{
+    document.removeEventListener('keypress',x)
+})
+
+$('.search-wrapper input').addEventListener('focusout',()=>{
+    document.addEventListener('keypress',x) 
+})
+```
+
+### 查看本地的localStorage,若有则替换原有的hash
+```
+let hashInlocalStorage = JSON.parse(localStorage.getItem('uuu')
+```
+
