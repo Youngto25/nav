@@ -20,9 +20,12 @@
   },
   "homepage": "https://github.com/Youngto25/nav-demo#readme",
   "dependencies": {
+    "autoprefixer": "^9.6.1",
     "css-loader": "^3.1.0",
     "file-loader": "^4.1.0",
+    "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.12.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "url-loader": "^2.1.0",
