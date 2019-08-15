@@ -6,7 +6,7 @@ import { createKeyboard } from './js/createKeyboard'
 const $ = s => document.querySelector(s)
 const $$ = s=> document.querySelectorAll(s)
 
-new Search($('.search-wrapper'))
+new Search($('#wrapper'))
 
 if(module.hot){
   module.hot.accept()

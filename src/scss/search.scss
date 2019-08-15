@@ -1,33 +1,73 @@
-.search-wrapper{
-  border: 1px solid #cccccc;
+#wrapper{
+  padding-top: 12vh;
   display: flex;
-  align-items: center;
-  position: fixed;
-  margin-top: 150px;
-  padding: 4px 8px;
-  background: #efefef;
-  border-radius: 8px;
-  &.active{
-    border: 1px solid #232323;
-    box-shadow: 0px 1px 1px 1px #2d3436;
-  }
-  input{
-    height: 30px;
-    width: 500px;
-    padding: 8px;
-    font-size: 14px;
-    background: #efefef;
-  }
-  .search-button{
-    cursor: pointer;
-    .icon{
-      height: 24px;
-      width: 24px;
-      &:hover{
-        fill: #C1AC9B;
-        transform: scale(1.2);
+  flex-direction: column;
+  .change{
+    align-self: flex-start;
+    span{
+      display: inline-block;
+      width: 80px;
+      height: 35px;
+      line-height: 35px;
+      background: #cccccc;
+      position: relative;
+      color: #1F1F1F;
+      cursor: pointer;
+      opacity: 0.8;
+      border-top-left-radius: 8px;
+      &:first-child{
+        margin-right: 8px;
+      }
+      &::after{
+        content: '';
+        display: block;
+        border-width: 17.5px;
+        border-style: solid;
+        border-color: transparent transparent #cccccc #cccccc;
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translateX(100%);
+        z-index: 10;
+      }
+      &.active{
+        background: #efefef;
+        z-index: 10;
+        opacity: 1;
+        &::after{
+          border-color: transparent transparent #efefef #efefef;
+        }
       }
     }
-
+  }
+  .search-wrapper{
+    border: 1px solid #cccccc;
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    background: #efefef;
+    border-radius: 0 8px 8px 8px;
+    &.active{
+      border: 0 1px 1px 1px solid #232323;
+    }
+    input{
+      height: 30px;
+      width: 500px;
+      padding: 8px;
+      font-size: 14px;
+      background: #efefef;
+    }
+    .search-button{
+      cursor: pointer;
+      .icon{
+        height: 24px;
+        width: 24px;
+        &:hover{
+          fill: #C1AC9B;
+          transform: scale(1.2);
+        }
+      }
+  
+    }
   }
 }

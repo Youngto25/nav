@@ -4,11 +4,13 @@ export class Search{
     this.$ = s=> this.$el.querySelector(s)
     this.$$ = s=> this.$el.querySelectorAll(s)
     this.$input = this.$('input')
-    this.$value = ''
+    this.$value = '',
+    this.$search = 'https://cn.bing.com/search?q='
 
     this.getValue()
     this.buttonClick()
     this.listenEnter()
+    this.listenSpan()
   }
 
   getValue(){
@@ -33,7 +35,25 @@ export class Search{
     })
   }
 
+  listenSpan(){
+    this.$('.change').addEventListener('click',(e)=>{
+      for(let i = 0; i < e.target.parentElement.children.length; i++){
+        e.target.parentElement.children[i].classList.remove('active')
+      }
+      e.target.classList.add('active')
+      switch(e.target.innerText){
+        case 'Bing':
+          this.$search = 'https://cn.bing.com/search?q='
+          break
+        case 'Google':
+          this.$search = 'https://www.google.com/search?q='
+          break
+        default :
+      }
+    })
+  }
+
   search(){
-    window.open(`https://cn.bing.com/search?q=${this.$value}`)
+    window.open(`${this.$search}${this.$value}`)
   }
 }
